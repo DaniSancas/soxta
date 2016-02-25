@@ -35,7 +35,7 @@ class XmlToAvro:
     def __init__(self, xmlfile, avroschema, outputavro):
         """Setup, check if files exists, create schema and writer handler"""
         if not isfile(xmlfile):
-            raise IOError
+            raise IOError("File {} doesn't exist.".format(xmlfile))
         else:
             self.xmlfile = xmlfile
         self.schema = avro.schema.parse(open(avroschema).read())
@@ -65,8 +65,9 @@ class XmlToAvro:
                 if field.name == attribute_name:
                     available_types_list = self.schema_fields[field.name]  # Gets all available types for given field
                     datum[attribute_name] = self.field_to_datum(available_types_list, attribute_value)
+                    break
             else:
-                raise AttributeNotExpectedException(self.schema, field, element)
+                raise AttributeNotExpectedException(self.schema, attribute_name, element)
         return datum
 
     @staticmethod
@@ -81,7 +82,7 @@ class XmlToAvro:
         """Iterates over available types list and returns attribute value in the proper format"""
         for item_type in types_list:
             if item_type == "string":
-                return str(attribute_value)
+                return attribute_value
             elif item_type == "int":
                 return int(attribute_value)
             elif item_type == "boolean":
@@ -105,3 +106,4 @@ class XmlToAvro:
 
 if __name__ == "__main__":
     xta = XmlToAvro(argv[1], argv[2], argv[3])
+    xta.transform()
