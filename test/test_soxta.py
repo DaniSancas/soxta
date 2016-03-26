@@ -182,7 +182,7 @@ class TestXmlToAvro(unittest.TestCase):
         types_list = ["array"]
         result = ['c#', 'winforms', 'type-conversion', 'decimal', 'opacity']
         self.assertEqual(self.xta.field_to_datum(types_list,
-                         "&lt;c#&gt;&lt;winforms&gt;&lt;type-conversion&gt;&lt;decimal&gt;&lt;opacity&gt;"), result)
+                         "<c#><winforms><type-conversion><decimal><opacity>"), result)
 
     def test_list_fields_from_default_schema(self):
         expected_dict = {'Id': ["int"],
@@ -195,31 +195,32 @@ class TestXmlToAvro(unittest.TestCase):
         self.assertEqual(self.xta.schema_fields, expected_dict)
 
     def test_list_fields_from_schema_with_arrays(self):
-        expected_dict = {'AcceptedAnswerId': ["int", "null"],
-                         'AnswerCount': ["int", "null"],
-                         'Body': ["string"],
-                         'ClosedDate': ["long", "null"],
-                         'CommentCount': ["int"],
-                         'CommunityOwnedDate': ["long", "null"],
-                         'CreationDate': ["long"],
-                         'FavoriteCount': ["int", "null"],
-                         'Id': ["int"],
-                         'LastActivityDate': ["long"],
-                         'LastEditDate': ["long", "null"],
-                         'LastEditorDisplayName': ["string", "null"],
-                         'LastEditorUserId': ["int", "null"],
-                         'OwnerDisplayName': ["string", "null"],
-                         'OwnerUserId': ["int", "null"],
-                         'ParentId': ["int", "null"],
-                         'PostTypeId': ["int"],
-                         'Score': ["int"],
-                         'Tags': ["null", "array"],
-                         'Title': ["string", "null"],
-                         'ViewCount': ["int", "null"]}
+        self.assert_.__self__.maxDiff = None
+        expected_dict = {u'AcceptedAnswerId': ["int", "null"],
+                         u'AnswerCount': ["int", "null"],
+                         u'Body': ["string"],
+                         u'ClosedDate': ["long", "null"],
+                         u'CommentCount': ["int"],
+                         u'CommunityOwnedDate': ["long", "null"],
+                         u'CreationDate': ["long"],
+                         u'FavoriteCount': ["int", "null"],
+                         u'Id': ["int"],
+                         u'LastActivityDate': ["long"],
+                         u'LastEditDate': ["long", "null"],
+                         u'LastEditorDisplayName': ["string", "null"],
+                         u'LastEditorUserId': ["int", "null"],
+                         u'OwnerDisplayName': ["string", "null"],
+                         u'OwnerUserId': ["int", "null"],
+                         u'ParentId': ["int", "null"],
+                         u'PostTypeId': ["int"],
+                         u'Score': ["int"],
+                         u'Tags': ["array", "null"],
+                         u'Title': ["string", "null"],
+                         u'ViewCount': ["int", "null"]}
 
         xmlfile = "data/Sample.xml"
-        avroschema = "data/Sample2.avsc"
-        outputavro = "data/Sample.avro"
+        avroschema = "data/SamplePosts.avsc"
+        outputavro = "data/SamplePosts.avro"
         complex_xta = XmlToAvro(xmlfile, avroschema, outputavro)
         complex_xta.list_fields()
         self.assertEqual(complex_xta.schema_fields, expected_dict)

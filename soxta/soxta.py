@@ -82,7 +82,8 @@ class XmlToAvro:
         """Iterates over available types list and returns attribute value in the proper format"""
         for item_type in types_list:
             if item_type == "string":
-                return attribute_value
+                return attribute_value if (isinstance(attribute_value, str) or isinstance(attribute_value, unicode)) \
+                                        else str(attribute_value)
             elif item_type == "int":
                 return int(attribute_value)
             elif item_type == "boolean":
@@ -93,17 +94,21 @@ class XmlToAvro:
                 else:
                     return long(attribute_value)
             elif item_type == "array":
-                if "&lt;" in attribute_value or "&gt;" in attribute_value:  # Tag array
-                    without_start = attribute_value.replace("&lt;", "")
-                    split_string = without_start.split("&gt;")
+                if "<" in attribute_value or ">" in attribute_value:  # Tag array
+                    without_start = attribute_value.replace("<", "")
+                    split_string = without_start.split(">")
                     split_string.remove("")  # Possible remaining empty string
                     return split_string
             elif item_type == "null":
-                pass  # Do nothing
+                continue  # Do nothing, next iteration
             else:
                 FieldTypeNotExpectedException(self.schema, item_type, types_list)  # Schema contains non expected field
 
 
 if __name__ == "__main__":
-    xta = XmlToAvro(argv[1], argv[2], argv[3])
-    xta.transform()
+    if len(argv) != 4:
+        print "Wrong parameters. Usage example:\n$ python2.7 soxta.py /path/to/file.xml /path/to/schema.avsc " \
+              "/path/to/output.avro"
+    else:
+        xta = XmlToAvro(argv[1], argv[2], argv[3])
+        xta.transform()
