@@ -13,7 +13,7 @@ Firstly, we need uncompressed data from the **Archive.org** public dataset: http
 
 ### Convert from XML to AVRO:
 
-Then we need to run `soxta.py` script, specifying the XML file to convert, the AVRO schema file, and the path for the result AVRO file::
+Then we need to run `soxta.py` script, specifying the XML file to convert, the AVRO schema file, and the path for the result AVRO file:
 
 ```bash
 $ soxta.py xml_data/Posts.xml avro_schemas/Posts.avsc avro_data/Posts.avro
